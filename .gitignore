@@ -1,3 +1,5 @@
+
+
 # Prerequisites
 *.d
 
@@ -76,3 +78,5 @@ Testing/
 #output files
 output/
 python/landmark_annotator/resources/
+
+.DS_Store

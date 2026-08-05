@@ -22,6 +22,8 @@ file(GLOB_RECURSE CPD_SOURCES
 )
 list(FILTER CPD_SOURCES EXCLUDE REGEX ".*fgt.*")
 
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
+
 add_executable(cpp_knee_alignment 
     ${SOURCES}
     ${CPD_SOURCES}
