@@ -1,0 +1,44 @@
+#pragma once
+
+#include <Eigen/Dense>
+#include <functional>
+#include <string>
+#include <common/StatusEvent.h>
+#include "nanoflann.hpp"
+
+using Matrix3D = Eigen::Matrix<float, Eigen::Dynamic, 3>;
+
+
+
+
+
+class Aligner {
+public:
+    Aligner(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback);
+    ~Aligner();
+
+    //setters and getters
+    Matrix3D get_scan(){return m_scan;}
+    Matrix3D get_master(){return m_master;}
+    void set_scan(Matrix3D scan){m_scan = scan;}
+    void set_master(Matrix3D master){m_master = master;}
+
+    //methods
+    void segment();
+    void initial_alignment();
+    void icp_alignment(int max_iterations = 50, float convergence_threshold = 0.0169);
+    void cpd_alignment(float alpha = 0.5f, float beta = 1.0f, int max_iterations = 150, float tolarence = 0.000003f, float downsample = 0.02);
+    void Library_cpd();
+
+private:
+    //properties
+    Matrix3D m_scan; //one we dont modify (target)
+    Matrix3D m_master; //one we modify (source)
+    std::function<void(StatusEvent)> m_callback;
+
+    //helper funcs
+    Matrix3D center(Matrix3D points);
+    void pca();
+    Matrix3D ransac(Matrix3D points, float threshold, int iterations);
+    Matrix3D euclidean_cluster(Matrix3D points, float threshold = 0.02);
+};
