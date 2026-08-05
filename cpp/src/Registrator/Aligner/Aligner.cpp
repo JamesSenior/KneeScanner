@@ -9,7 +9,7 @@
 #include <common/StatusEvent.h>
 #include "common/kd_tree.h"
 
-#include <cpd/nonrigid.hpp>
+//#include <cpd/nonrigid.hpp>
 
 
 //constructors:
@@ -178,6 +178,7 @@ void Aligner::initial_alignment()
 
 
 
+/*
 
 //LIBRARY CPD//
 void Aligner::Library_cpd()
@@ -202,3 +203,4 @@ void Aligner::Library_cpd()
 }
 
 
+*/
