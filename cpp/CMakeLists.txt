@@ -1,7 +1,15 @@
 cmake_minimum_required(VERSION 3.15)
 project(cpp_knee_alignment)
 
-#include(FetchContent)
+include(FetchContent)
+
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+)
+
+FetchContent_MakeAvailable(json)
+
 
 #FetchContent_Declare(
 #    cpd
@@ -35,4 +43,4 @@ target_include_directories(cpp_knee_alignment PRIVATE
     #${cpd_SOURCE_DIR}/include
 )
 
-target_link_libraries(cpp_knee_alignment PRIVATE Eigen3::Eigen)
+target_link_libraries(cpp_knee_alignment PRIVATE Eigen3::Eigen PRIVATE nlohmann_json::nlohmann_json)

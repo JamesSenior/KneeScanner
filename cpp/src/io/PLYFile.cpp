@@ -139,7 +139,7 @@ static uint32_t float_to_big_endian(float value)
 //write to file
 void writeToPLY(Matrix3D& points, std::string fileName)
 {
-    std::ofstream file("../resources/output/" + fileName, std::ios::binary);
+    std::ofstream file("/Users/jamessenior/Desktop/Coding/KneeScanner/cpp/resources/output/" + fileName, std::ios::binary);
 
     if (!file)
         throw std::runtime_error("Cannot create PLY file");
@@ -178,7 +178,7 @@ void writeToPLY(Matrix3D& points, std::string fileName)
 //read from file
 Matrix3D readPLY(std::string fileName)
 {
-    std::ifstream file("../resources/masters/" + fileName, std::ios::binary);
+    std::ifstream file(fileName, std::ios::binary);
 
     if (!file)
         throw std::runtime_error("Cannot open PLY file");

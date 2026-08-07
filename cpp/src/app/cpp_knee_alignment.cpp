@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 #include <Eigen/Dense>
-#include "common/leg_scan.h"
+#include "leg_scan.h"
 
 using Matrix3D = Eigen::Matrix<float, Eigen::Dynamic, 3>;
 using namespace std;
@@ -60,9 +60,52 @@ void cpp_knee_alignment::run()
     cout << "Starting Program\n";
 
     
+    //get all data:
+    
+    //name:
+    std::string title = "RosieV2 Test";
+    std::string date = "03/12/2008";
+    
     //get clouds:
-    Matrix3D master = readPLY("rosieV2.ply");
-    Matrix3D scan = readPLY("jamesV2.ply");  
+    Matrix3D leftLegScan = readPLY("/Users/jamessenior/Desktop/Coding/KneeScanner/cpp/resources/masters/rosieV2.ply");
+    //Matrix3D rightLegScan = readPLY("rosieV2.ply");
+    //Matrix3D kneelingScan = readPLY("rosieV2.ply");
+    
+    
+    //set up scan:
+    LegScan leg_scan(title, date, callback);
+    leg_scan.readInMasters(); //reads in master clouds and landmark points
+
+    leg_scan.getLeftLeg().scan = leftLegScan;
+    //leg_scan.getRightLeg().scan =
+    //leg_scan.getKneeling().scan =
+    
+    
+    //run process:
+    leg_scan.create();
+    
+    
+    //write output file:
+    if(leg_scan.isCreated())
+    {
+        Matrix3D output = leg_scan.getCombined();
+        cout << endl << output.rows();
+        writeToPLY(output, "output.ply");
+    }
+    else
+    {
+        cout << "\nno output has been created";
+    }
+    
+    
+    
+    cout << "\nProgram Finished\n";
+    
+    
+    /*
+    Matrix3D master;
+    Matrix3D scan;
+    
 
     //combine and write
     Matrix3D test11(scan.rows() + master.rows(), 3);
@@ -90,8 +133,8 @@ void cpp_knee_alignment::run()
     test13 << scan, master;
     writeToPLY(test13, "test13.ply");
 
-
-    cout << "\nProgram Finished\n";
+     */
+    
 }
 
 

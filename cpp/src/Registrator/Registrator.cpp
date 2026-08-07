@@ -6,11 +6,9 @@
 
 //constructors:
 Registrator::Registrator(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback)
-{
-    m_scan = scan;
-    m_master = master;
-    m_callback = callback;
-}
+    : m_scan(scan), m_master(master), m_callback(callback)
+{}
+
 Registrator::~Registrator(){}
 
 

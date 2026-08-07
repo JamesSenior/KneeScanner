@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 #include <functional>
 #include <string>
+#include "app/leg_scan.h"
 
 using Matrix3D = Eigen::Matrix<float, Eigen::Dynamic, 3>;
 
