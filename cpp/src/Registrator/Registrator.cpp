@@ -37,7 +37,7 @@ void Registrator::align(){
     Aligner aligner(m_scan, m_master, m_callback);
     aligner.initial_alignment();
     aligner.icp_alignment();
-    //aligner.cpd_alignment();
+    aligner.cpd_alignment();
 
     m_scan = aligner.get_scan();
     m_master = aligner.get_master();
