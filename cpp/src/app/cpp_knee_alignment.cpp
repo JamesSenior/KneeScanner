@@ -89,8 +89,10 @@ void cpp_knee_alignment::run()
     if(leg_scan.isCreated())
     {
         Matrix3D output = leg_scan.getCombined();
-        cout << endl << output.rows();
         writeToPLY(output, "output.ply");
+        
+        writeToPLY(leg_scan.getLeftLeg().master, "source.ply");
+        writeToPLY(leg_scan.getLeftLeg().scan, "target.ply");
     }
     else
     {
@@ -100,40 +102,6 @@ void cpp_knee_alignment::run()
     
     
     cout << "\nProgram Finished\n";
-    
-    
-    /*
-    Matrix3D master;
-    Matrix3D scan;
-    
-
-    //combine and write
-    Matrix3D test11(scan.rows() + master.rows(), 3);
-    test11 << scan, master;
-    writeToPLY(test11, "test11.ply");
-
-    //segment
-    Registrator registor(scan, master, callback);
-    registor.segment();
-    scan = registor.get_scan();
-    master = registor.get_master();
-
-    //combine and write
-    Matrix3D test12(scan.rows() + master.rows(), 3);
-    test12 << scan, master;
-    writeToPLY(test12, "test12.ply");
-
-    //align
-    registor.align();
-    scan = registor.get_scan();
-    master = registor.get_master();
-
-    //combine and write
-    Matrix3D test13(scan.rows() + master.rows(), 3);
-    test13 << scan, master;
-    writeToPLY(test13, "test13.ply");
-
-     */
     
 }
 

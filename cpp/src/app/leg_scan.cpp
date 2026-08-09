@@ -82,12 +82,13 @@ void LegScan::create()
     
     
     //set output:
+    left_leg.master = leftLegRegistor.get_master();
+    left_leg.scan = leftLegRegistor.get_scan();
+    
     Matrix3D temp(leftLegRegistor.get_scan().rows() + leftLegRegistor.get_master().rows(), 3);
     temp << leftLegRegistor.get_scan(), leftLegRegistor.get_master();
     combined = temp;
     
-    
-    std::cout << leftLegRegistor.get_scan().rows() << std::endl << leftLegRegistor.get_master().rows();
     
     //set created to true
     created = true;
