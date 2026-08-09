@@ -307,15 +307,50 @@ void update_variance(
 
 
 
+Matrix3D downsize(const Matrix3D& points, int target)
+{
+    float low = 0.00f;
+    float high = 0.99f;
+
+    Matrix3D result;
+
+    for (int i = 0; i < 20; i++)
+    {
+        float voxel = (low + high) / 2.0f;
+
+        result = voxelDownsample(points, voxel);
+
+        if(std::abs(result.rows() - target) < 100)//break when it converges
+        {
+            break;
+        }
+            
+        if (result.rows() > target)
+        {
+            // Too many points
+            // Need a bigger voxel
+            low = voxel;
+        }
+        else
+        {
+            // Too few points
+            // Need a smaller voxel
+            high = voxel;
+        }
+    }
+
+    return result;
+}
+
+
 
 
 
 
 //CPD alignment//
 //coheent point drift (non-rigid transform)
-void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations, float tolarence, float downsample)
+void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations, float tolarence, int targetSize)
 {
-    
     //call back that algerithum has started
     StatusEvent event;
     event.component = Component::Registrator;
@@ -325,11 +360,12 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
     m_callback(event);
     
     
-    
-    
     //STEP 1: Represent point clouds
-    Matrix3D target = voxelDownsample(m_scan, downsample);
-    Matrix3D source = voxelDownsample(m_master, downsample);
+    Matrix3D target = downsize(m_scan, targetSize);
+    Matrix3D source = downsize(m_master, targetSize);
+    
+    std::cout << "Using cloud sizes of: " + std::to_string(target.rows()) + " and " + std::to_string(source.rows()) + "\n";
+    
     
     
     //STEP 2: Initilise CPD Parameters
@@ -361,7 +397,7 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
     //weighted matrix
     Matrix3D W = Matrix3D::Zero(source_rows, 3);
     
-    
+    int stable_iterations = 0; //count number of iterations wihtin tolirance
     
     
     
@@ -385,9 +421,14 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
         update_variance(target, transformed_source, Pt1, P1, PX, Np, 3, tolarence, sigma2, diff);
         
         //STEP 4.5: Check convergance
-        if(diff<tolarence)
+        if(diff<tolarence) //if within tolirance
         {
-            //break;
+            stable_iterations++; //increase counter of number of iterations within tolirance in a row
+            if(stable_iterations > 5){break;} //if 5 iterations in a row then break
+        }
+        else
+        {
+            stable_iterations = 0; //reset to zero
         }
         
         //callback
