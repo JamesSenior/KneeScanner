@@ -71,7 +71,6 @@ void cpp_knee_alignment::run()
     //Matrix3D rightLegScan = readPLY("rosieV2.ply");
     //Matrix3D kneelingScan = readPLY("rosieV2.ply");
     
-    
     //set up scan:
     LegScan leg_scan(title, date, callback);
     leg_scan.readInMasters(); //reads in master clouds and landmark points

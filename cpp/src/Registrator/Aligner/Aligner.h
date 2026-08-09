@@ -27,7 +27,7 @@ public:
     void segment();
     void initial_alignment();
     void icp_alignment(int max_iterations = 50, float convergence_threshold = 0.0169);
-    void cpd_alignment(float alpha = 0.2f, float beta = 0.5f, float w = 0.05f, int max_iterations = 300, float tolarence = 0.000003f, float downsample = 0.02);
+    void cpd_alignment(float alpha = 0.2f, float beta = 0.2f, float w = 0.05f, int max_iterations = 300, float tolarence = 2e-6f, int targetSize = 1500);
     void Library_cpd();
 
 private:
