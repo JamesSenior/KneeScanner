@@ -91,19 +91,6 @@ void cpp_knee_alignment::run()
         Matrix3D output = leg_scan.getCombined();
         writeToPLY(output, "output.ply");
         
-        std::cout << "min1:\n"
-                  << leg_scan.getLeftLeg().master.colwise().minCoeff() << std::endl;
-
-        std::cout << "max1:\n"
-                  << leg_scan.getLeftLeg().master.colwise().maxCoeff() << std::endl;
-        
-        std::cout << "min2:\n"
-                  << leg_scan.getLeftLeg().scan.colwise().minCoeff() << std::endl;
-
-        std::cout << "max2:\n"
-                  << leg_scan.getLeftLeg().scan.colwise().maxCoeff() << std::endl;
-        
-        
         writeToPLY(leg_scan.getLeftLeg().master, "source.ply");
         writeToPLY(leg_scan.getLeftLeg().scan, "target.ply");
     }
@@ -115,7 +102,6 @@ void cpp_knee_alignment::run()
     
     
     cout << "\nProgram Finished\n";
-    
     
 }
 
