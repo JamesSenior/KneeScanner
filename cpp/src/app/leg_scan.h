@@ -14,8 +14,8 @@ struct LegScanComponent
     Matrix3D scan;
     Matrix3D master;
 
-    std::map<std::string, Eigen::Vector3f> master_landmarks;
-    std::map<std::string, Eigen::Vector3f> scan_landmarks;
+    std::map<std::string, int> master_landmarks;
+    std::map<std::string, int> scan_landmarks;
 };
 
 

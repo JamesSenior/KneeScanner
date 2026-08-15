@@ -15,9 +15,9 @@ using json = nlohmann::json;
 //helper functios:
 
 
-std::map<std::string, Eigen::Vector3f> readLandmarks(const std::string& filename)
+std::map<std::string, int> readLandmarks(const std::string& filename)
 {
-    std::map<std::string, Eigen::Vector3f> landmarks;
+    std::map<std::string, int> landmarks;
 
     // Open JSON file
     std::ifstream file(filename);
@@ -31,21 +31,13 @@ std::map<std::string, Eigen::Vector3f> readLandmarks(const std::string& filename
     json data;
     file >> data;
 
-
     // Read each landmark
     for (const auto& item : data)
     {
         std::string label = item["label"];
+        int index = item["index"];
 
-        auto point = item["point"];
-
-        Eigen::Vector3f position(
-            point[0].get<float>(),
-            point[1].get<float>(),
-            point[2].get<float>()
-        );
-
-        landmarks[label] = position;
+        landmarks[label] = index;
     }
 
     return landmarks;
