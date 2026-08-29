@@ -42,7 +42,7 @@ void Registrator::align(){
     m_scan = aligner.get_scan();
     m_master = aligner.get_master();
     
-    //read landmark points from the end
+    //read landmark points from the end of master
     int row = m_master.rows() - m_landmarks.size();
     for (auto& [name, point] : m_landmarks) {
         point = m_master.row(row++).transpose();

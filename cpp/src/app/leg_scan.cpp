@@ -59,13 +59,6 @@ std::map<std::string, Eigen::Vector3f> readLandmarks(const std::string& filename
 
 void LegScan::create()
 {
-    std::cout << "Landmarks c:\n";
-
-    for (const auto& [name, point] : left_leg.master_landmarks) {
-        std::cout << name << ": "
-                  << point.transpose()
-                  << std::endl;
-    }
     
     //REGISTER:
     Registrator leftLegRegistor(left_leg.scan, left_leg.master, left_leg.master_landmarks, callback);

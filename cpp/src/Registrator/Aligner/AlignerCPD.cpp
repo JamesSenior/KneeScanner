@@ -307,18 +307,24 @@ void update_variance(
 
 
 
-Matrix3D downsize(const Matrix3D& points, int target)
+Matrix3D downsize(const Matrix3D& points, int target, int preservePoints)
 {
     float low = 0.00f;
     float high = 0.99f;
 
     Matrix3D result;
+    
+    target -= preservePoints;
+    
+    int normalPointCount = points.rows() - preservePoints;
+    Matrix3D normalPoints = points.topRows(normalPointCount);
+    
 
     for (int i = 0; i < 20; i++)
     {
         float voxel = (low + high) / 2.0f;
 
-        result = voxelDownsample(points, voxel);
+        result = voxelDownsample(normalPoints, voxel);
 
         if(std::abs(result.rows() - target) < 100)//break when it converges
         {
@@ -338,7 +344,15 @@ Matrix3D downsize(const Matrix3D& points, int target)
             high = voxel;
         }
     }
+    
+    
+    //add preserved points back:
+    int normalRows = result.rows();
+    result.conservativeResize(normalRows + preservePoints, 3);
+    
+    result.bottomRows(preservePoints) = points.bottomRows(preservePoints);
 
+    
     return result;
 }
 
@@ -363,12 +377,11 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
 
     
     //STEP 1: Represent point clouds
-    Matrix3D target = downsize(m_scan, targetSize);
-    Matrix3D source = downsize(m_master, targetSize);
+    Matrix3D target = downsize(m_scan, targetSize, 0);
+    Matrix3D source = downsize(m_master, targetSize, m_landmarks.size());
     
     
     std::cout << "Using cloud sizes of: " + std::to_string(target.rows()) + " and " + std::to_string(source.rows()) + "\n";
-    
     
     
     //STEP 2: Initilise CPD Parameters
