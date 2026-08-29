@@ -5,8 +5,8 @@
 #include <iostream>
 
 //constructors:
-Registrator::Registrator(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback)
-    : m_scan(scan), m_master(master), m_callback(callback)
+Registrator::Registrator(Matrix3D scan, Matrix3D master, std::map<std::string, Eigen::Vector3f> landmarks ,std::function<void(StatusEvent)> callback)
+    : m_scan(scan), m_master(master), m_landmarks(landmarks), m_callback(callback)
 {}
 
 Registrator::~Registrator(){}
@@ -34,12 +34,12 @@ void Registrator::segment()
 
 void Registrator::align(){
 
-    Aligner aligner(m_scan, m_master, m_callback);
+    Aligner aligner(m_scan, m_master, m_landmarks, m_callback);
     aligner.initial_alignment();
     aligner.icp_alignment();
     aligner.cpd_alignment();
 
     m_scan = aligner.get_scan();
     m_master = aligner.get_master();
+    m_landmarks = aligner.get_landmarks();
 }
-

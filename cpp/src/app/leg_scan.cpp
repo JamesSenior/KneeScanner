@@ -60,7 +60,7 @@ std::map<std::string, Eigen::Vector3f> readLandmarks(const std::string& filename
 void LegScan::create()
 {
     //REGISTER:
-    Registrator leftLegRegistor(left_leg.scan, left_leg.master, callback);
+    Registrator leftLegRegistor(left_leg.scan, left_leg.master, left_leg.master_landmarks,callback);
     //Registrator rightLegRegistor(right_leg.scan, right_leg.master, callback);
     //Registrator kneelingRegistor(kneeling.scan, kneeling.master, callback);
     
@@ -74,9 +74,6 @@ void LegScan::create()
     //rightLegRegistor.align();
     //kneelingRegistor.align();
     
-    //transfer
-    
-    
     
     //ASSEMBLE:
     
@@ -84,6 +81,7 @@ void LegScan::create()
     //set output:
     left_leg.master = leftLegRegistor.get_master();
     left_leg.scan = leftLegRegistor.get_scan();
+    left_leg.scan_landmarks = leftLegRegistor.get_landmarks();
     
     Matrix3D temp(leftLegRegistor.get_scan().rows() + leftLegRegistor.get_master().rows(), 3);
     temp << leftLegRegistor.get_scan(), leftLegRegistor.get_master();

@@ -13,7 +13,7 @@
 
 
 //constructors:
-Aligner::Aligner(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback)
+Aligner::Aligner(Matrix3D scan, Matrix3D master, std::map<std::string, Eigen::Vector3f> landmarks, std::function<void(StatusEvent)> callback)
 {
     m_scan = scan;
     m_master = master;

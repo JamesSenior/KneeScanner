@@ -14,14 +14,16 @@ using Matrix3D = Eigen::Matrix<float, Eigen::Dynamic, 3>;
 
 class Aligner {
 public:
-    Aligner(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback);
+    Aligner(Matrix3D scan, Matrix3D master, std::map<std::string, Eigen::Vector3f> landmarks, std::function<void(StatusEvent)> callback);
     ~Aligner();
 
     //setters and getters
     Matrix3D get_scan(){return m_scan;}
     Matrix3D get_master(){return m_master;}
+    Matrix3D get_landmarks(){return m_landmarks;}
     void set_scan(Matrix3D scan){m_scan = scan;}
     void set_master(Matrix3D master){m_master = master;}
+    void set_landmarks(std::map<std::string, Eigen::Vector3f> landmarks){m_landmarks = landmarks;}
 
     //methods
     void segment();
@@ -34,6 +36,7 @@ private:
     //properties
     Matrix3D m_scan; //one we dont modify (target)
     Matrix3D m_master; //one we modify (source)
+    std::map<std::string, Eigen::Vector3f> m_landmarks;
     std::function<void(StatusEvent)> m_callback;
 
     //helper funcs
