@@ -366,20 +366,6 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
     Matrix3D target = downsize(m_scan, targetSize);
     Matrix3D source = downsize(m_master, targetSize);
     
-    //Add landmark points to the end
-    const int originalRows = source.rows();
-
-    source.conservativeResize(
-        originalRows + m_landmarks.size(),
-        3
-    );
-
-    int row = originalRows;
-
-    for (const auto& [name, point] : m_landmarks) {
-        source.row(row++) = point.transpose();
-    }
-    
     
     std::cout << "Using cloud sizes of: " + std::to_string(target.rows()) + " and " + std::to_string(source.rows()) + "\n";
     
@@ -464,12 +450,6 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
     
     //STEP 5: return results
     m_master = transformed_source;
-    
-    //read landmark points
-    row = originalRows;
-    for (auto& [name, point] : m_landmarks) {
-        point = result.row(row++).transpose();
-    }
     
 }
 

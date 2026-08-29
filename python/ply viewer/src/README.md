@@ -72,8 +72,8 @@ From this directory, create a virtual environment:
 
 ```bash
 
-python3 -m venv .venv
-
+rm -rf .venv
+/opt/homebrew/bin/python3.12 -m venv .venv
 
 
 ```bash
@@ -84,7 +84,7 @@ source .venv/bin/activate
 
 ```bash
 
-python3 -m pip install -r requirements.txt
+pip install -r requirements.txt
 
 
 
@@ -101,7 +101,7 @@ source .venv/bin/activate
 Then run:
 
 ```bash
-python3 main.py
+python main.py
 
 
 

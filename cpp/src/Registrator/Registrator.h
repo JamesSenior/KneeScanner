@@ -16,7 +16,7 @@ public:
 
     Matrix3D get_scan(){return m_scan;}
     Matrix3D get_master(){return m_master;}
-    Matrix3D get_landmarks(){return m_landmarks;}
+    std::map<std::string, Eigen::Vector3f> get_landmarks(){return m_landmarks;}
     void set_scan(Matrix3D scan){m_scan = scan;}
     void set_master(Matrix3D master){m_master = master;}
     void set_landmarks(std::map<std::string, Eigen::Vector3f> landmarks){m_landmarks = landmarks;}

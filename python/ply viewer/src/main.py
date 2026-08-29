@@ -13,7 +13,7 @@ def main():
 
     #read in point cloud
     cloud1 = o3d.io.read_point_cloud("source.ply")
-    cloud2 = o3d.io.read_point_cloud("target.ply")
+    cloud2 = o3d.io.read_point_cloud("output.ply")
 
     cloud1.paint_uniform_color([1, 0, 0])  # red
     cloud2.paint_uniform_color([0, 0, 1])  # blue
