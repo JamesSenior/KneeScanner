@@ -9,14 +9,15 @@
 #include <common/StatusEvent.h>
 #include "common/kd_tree.h"
 
-//#include <cpd/nonrigid.hpp>
+//#include <cpd/src/nonrigid.hpp>
 
 
 //constructors:
-Aligner::Aligner(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback)
+Aligner::Aligner(Matrix3D scan, Matrix3D master, std::map<std::string, Eigen::Vector3f> landmarks, std::function<void(StatusEvent)> callback)
 {
     m_scan = scan;
     m_master = master;
+    m_landmarks = landmarks;
     m_callback = callback;
 }
 Aligner::~Aligner(){}
@@ -160,6 +161,20 @@ void Aligner::initial_alignment()
     event.level = LogLevel::NewUpdate;
     m_callback(event);
 
+    
+    //put landmark points at the end so they are accessable
+    const int originalRows = m_master.rows();
+    int row = originalRows;
+     
+    m_master.conservativeResize(originalRows + m_landmarks.size(), 3);
+
+    for (const auto& [name, point] : m_landmarks) {
+        m_master.row(row++) = point.transpose();
+    }
+     
+    
+    
+    
     //center
     m_master = center(m_master); //centers both scan and master to 0,0,0 on their respective com
     m_scan = center(m_scan);
