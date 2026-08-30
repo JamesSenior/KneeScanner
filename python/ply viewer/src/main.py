@@ -13,16 +13,19 @@ def main():
 
     #read in point cloud
     cloud1 = o3d.io.read_point_cloud("source.ply")
-    cloud2 = o3d.io.read_point_cloud("output.ply")
+    cloud2 = o3d.io.read_point_cloud("target.ply")
+    cloud3 = o3d.io.read_point_cloud("output.ply")
 
     cloud1.paint_uniform_color([1, 0, 0])  # red
-    cloud2.paint_uniform_color([0, 0, 1])  # blue
+    cloud2.paint_uniform_color([0, 1, 0])  # green
+    cloud3.paint_uniform_color([0, 0, 1])  # blue
 
     vis = o3d.visualization.Visualizer()
     vis.create_window()
 
     vis.add_geometry(cloud1)
     vis.add_geometry(cloud2)
+    vis.add_geometry(cloud3)
 
     vis.run()
 
