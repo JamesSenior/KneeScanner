@@ -9,7 +9,7 @@
 #include <common/StatusEvent.h>
 #include "common/kd_tree.h"
 
-//#include <cpd/nonrigid.hpp>
+//#include <cpd/src/nonrigid.hpp>
 
 
 //constructors:
@@ -161,6 +161,7 @@ void Aligner::initial_alignment()
     event.level = LogLevel::NewUpdate;
     m_callback(event);
 
+    
     //put landmark points at the end so they are accessable
     const int originalRows = m_master.rows();
     int row = originalRows;
@@ -170,6 +171,7 @@ void Aligner::initial_alignment()
     for (const auto& [name, point] : m_landmarks) {
         m_master.row(row++) = point.transpose();
     }
+     
     
     
     

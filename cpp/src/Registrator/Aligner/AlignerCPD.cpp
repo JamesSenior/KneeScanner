@@ -351,7 +351,7 @@ Matrix3D downsize(const Matrix3D& points, int target, int preservePoints)
     result.conservativeResize(normalRows + preservePoints, 3);
     
     result.bottomRows(preservePoints) = points.bottomRows(preservePoints);
-
+    
     
     return result;
 }
@@ -440,7 +440,7 @@ void Aligner::cpd_alignment(float alpha, float beta, float w, int max_iterations
         if(diff<tolarence) //if within tolirance
         {
             stable_iterations++; //increase counter of number of iterations within tolirance in a row
-            if(stable_iterations > 5){break;} //if 5 iterations in a row then break
+            //if(stable_iterations > 5){break;} //if 5 iterations in a row then break
         }
         else
         {
