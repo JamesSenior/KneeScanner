@@ -63,21 +63,21 @@ void cpp_knee_alignment::run()
     //get all data:
     
     //name:
-    std::string title = "RosieV2 Test";
+    std::string title = "Rosie Test";
     std::string date = "03/12/2008";
     
     //get clouds:
-    Matrix3D leftLegScan = readPLY("/Users/jamessenior/Desktop/Coding/KneeScanner/cpp/resources/masters/rosieV2.ply");
-    //Matrix3D rightLegScan = readPLY("rosieV2.ply");
-    //Matrix3D kneelingScan = readPLY("rosieV2.ply");
+    Matrix3D leftLegScan = readPLY("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/LeftLeg_rosie.ply");
+    Matrix3D rightLegScan = readPLY("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/RightLeg_rosie.ply");
+    Matrix3D kneelingScan = readPLY("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/Kneeling_rosie.ply");
     
     //set up scan:
     LegScan leg_scan(title, date, callback);
     leg_scan.readInMasters(); //reads in master clouds and landmark points
 
     leg_scan.getLeftLeg().scan = leftLegScan;
-    //leg_scan.getRightLeg().scan =
-    //leg_scan.getKneeling().scan =
+    leg_scan.getRightLeg().scan = rightLegScan;
+    leg_scan.getKneeling().scan = kneelingScan;
     
     
     //run process:
@@ -90,8 +90,8 @@ void cpp_knee_alignment::run()
         Matrix3D output = leg_scan.getCombined();
         writeToPLY(output, "output.ply");
         
-        writeToPLY(leg_scan.getLeftLeg().master, "source.ply");
-        writeToPLY(leg_scan.getLeftLeg().scan, "target.ply");
+        writeToPLY(leg_scan.getKneeling().master, "source.ply");
+        writeToPLY(leg_scan.getKneeling().scan, "target.ply");
     }
     else
     {
