@@ -12,8 +12,8 @@ def main():
     
 
     #read in point cloud
-    cloud1 = o3d.io.read_point_cloud("source.ply")
-    cloud2 = o3d.io.read_point_cloud("target.ply")
+    cloud1 = o3d.io.read_point_cloud("master.ply")
+    cloud2 = o3d.io.read_point_cloud("scan.ply")
     cloud3 = o3d.io.read_point_cloud("output.ply")
 
     cloud1.paint_uniform_color([1, 0, 0])  # red

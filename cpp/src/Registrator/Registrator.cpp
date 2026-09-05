@@ -32,18 +32,36 @@ void Registrator::segment()
 }
 
 
-void Registrator::align(){
+void Registrator::align(float alpha, float beta, float w, int max_iterations, float tolarence, int targetSize, bool twoStep){
+    
+    //put landmark points at the end so they are accessable
+    const int originalRows = m_master.rows();
+    int row = originalRows;
+     
+    m_master.conservativeResize(originalRows + m_landmarks.size(), 3);
 
+    for (const auto& [name, point] : m_landmarks) {
+        m_master.row(row++) = point.transpose();
+    }
+    
+
+    //create aligner object and run initiual, icp, and cpd alignments
     Aligner aligner(m_scan, m_master, m_landmarks, m_callback);
     aligner.initial_alignment();
     aligner.icp_alignment();
-    aligner.cpd_alignment();
+    aligner.cpd_alignment(alpha, beta, w, max_iterations, tolarence, targetSize);
+    
+    //if twostep is true run CPD twice, now run it again with a more localised deformation parameter 1/3rd Beta
+    if(twoStep){
+        aligner.cpd_alignment(alpha, beta/3, w, max_iterations, tolarence, targetSize);
+    }
 
+    //retrieve results from aligner
     m_scan = aligner.get_scan();
     m_master = aligner.get_master();
     
     //read landmark points from the end of master
-    int row = m_master.rows() - m_landmarks.size();
+    row = m_master.rows() - m_landmarks.size();
     for (auto& [name, point] : m_landmarks) {
         point = m_master.row(row++).transpose();
     }

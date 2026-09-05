@@ -68,16 +68,16 @@ void LegScan::create()
     Registrator kneelingRegistor(kneeling.scan, kneeling.master, kneeling.master_landmarks, callback);
     
     //segment
-    //leftLegRegistor.segment();
+    leftLegRegistor.segment();
     //rightLegRegistor.segment();
-    kneelingRegistor.segment();
+    //kneelingRegistor.segment();
 
     //align
-    //leftLegRegistor.align();
+    leftLegRegistor.align();
     //rightLegRegistor.align();
-    kneelingRegistor.align();
+    //kneelingRegistor.align(0.3f, 3.0f, 0.01f, 100, 2e-9f, 4000, true);
     
-    //get output:
+    //get outputs:
     left_leg.master = leftLegRegistor.get_master();
     left_leg.scan = leftLegRegistor.get_scan();
     left_leg.scan_landmarks = leftLegRegistor.get_landmarks();
@@ -92,7 +92,6 @@ void LegScan::create()
     
     
     //ASSEMBLE:
-    
     
     
     
