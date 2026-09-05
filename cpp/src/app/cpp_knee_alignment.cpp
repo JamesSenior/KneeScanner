@@ -90,8 +90,14 @@ void cpp_knee_alignment::run()
         Matrix3D output = leg_scan.getCombined();
         writeToPLY(output, "output.ply");
         
-        writeToPLY(leg_scan.getLeftLeg().master, "master.ply");
-        writeToPLY(leg_scan.getLeftLeg().scan, "scan.ply");
+        writeToPLY(leg_scan.getLeftLeg().master, "LeftLegMaster.ply");
+        writeToPLY(leg_scan.getLeftLeg().scan, "LeftLegScan.ply");
+        
+        writeToPLY(leg_scan.getRightLeg().master, "RightLegMaster.ply");
+        writeToPLY(leg_scan.getRightLeg().scan, "RightLegScan.ply");
+        
+        writeToPLY(leg_scan.getKneeling().master, "KneelingMaster.ply");
+        writeToPLY(leg_scan.getKneeling().scan, "KneelingScan.ply");
     }
     else
     {

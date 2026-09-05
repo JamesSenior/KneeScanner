@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <thread>
 
 using json = nlohmann::json;
 
@@ -62,20 +63,33 @@ std::map<std::string, Eigen::Vector3f> readLandmarks(const std::string& filename
 void LegScan::create()
 {
     
-    //REGISTER:
+    //REGISTERS:
     Registrator leftLegRegistor(left_leg.scan, left_leg.master, left_leg.master_landmarks, callback);
     Registrator rightLegRegistor(right_leg.scan, right_leg.master, right_leg.master_landmarks, callback);
     Registrator kneelingRegistor(kneeling.scan, kneeling.master, kneeling.master_landmarks, callback);
     
-    //segment
-    leftLegRegistor.segment();
-    //rightLegRegistor.segment();
-    //kneelingRegistor.segment();
+    //each scan is run on seperate thread:
+    //each thread runs segmentation and alignment algerithms
+    std::thread t1([&]() {
+        leftLegRegistor.segment();
+        leftLegRegistor.align();
+    });
 
-    //align
-    leftLegRegistor.align();
-    //rightLegRegistor.align();
-    //kneelingRegistor.align(0.3f, 3.0f, 0.01f, 100, 2e-9f, 4000, true);
+    std::thread t2([&]() {
+        rightLegRegistor.segment();
+        rightLegRegistor.align();
+    });
+
+    std::thread t3([&]() {
+        kneelingRegistor.segment();
+        kneelingRegistor.align(0.3f, 3.0f, 0.01f, 100, 2e-9f, 4000, true);
+    });
+
+    // Wait for all three threads to finish
+    t1.join();
+    t2.join();
+    t3.join();
+    
     
     //get outputs:
     left_leg.master = leftLegRegistor.get_master();
