@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <thread>
 
 using json = nlohmann::json;
 
@@ -55,25 +56,53 @@ std::map<std::string, Eigen::Vector3f> readLandmarks(const std::string& filename
 
 
 
+
+
 //methods
 
 void LegScan::create()
 {
     
-    //REGISTER:
+    //REGISTERS:
     Registrator leftLegRegistor(left_leg.scan, left_leg.master, left_leg.master_landmarks, callback);
-    //Registrator rightLegRegistor(right_leg.scan, right_leg.master, callback);
-    //Registrator kneelingRegistor(kneeling.scan, kneeling.master, callback);
+    Registrator rightLegRegistor(right_leg.scan, right_leg.master, right_leg.master_landmarks, callback);
+    Registrator kneelingRegistor(kneeling.scan, kneeling.master, kneeling.master_landmarks, callback);
     
-    //segment
-    leftLegRegistor.segment();
-    //rightLegRegistor.segment();
-    //kneelingRegistor.segment();
+    //each scan is run on seperate thread:
+    //each thread runs segmentation and alignment algerithms
+    std::thread t1([&]() {
+        leftLegRegistor.segment();
+        leftLegRegistor.align();
+    });
 
-    //align
-    leftLegRegistor.align();
-    //rightLegRegistor.align();
-    //kneelingRegistor.align();
+    std::thread t2([&]() {
+        rightLegRegistor.segment();
+        rightLegRegistor.align();
+    });
+
+    std::thread t3([&]() {
+        kneelingRegistor.segment();
+        kneelingRegistor.align(0.3f, 3.0f, 0.01f, 50, 2e-9f, 4000, true);
+    });
+
+    // Wait for all three threads to finish
+    t1.join();
+    t2.join();
+    t3.join();
+    
+    
+    //get outputs:
+    left_leg.master = leftLegRegistor.get_master();
+    left_leg.scan = leftLegRegistor.get_scan();
+    left_leg.scan_landmarks = leftLegRegistor.get_landmarks();
+    
+    right_leg.master = rightLegRegistor.get_master();
+    right_leg.scan = rightLegRegistor.get_scan();
+    right_leg.scan_landmarks = rightLegRegistor.get_landmarks();
+    
+    kneeling.master = kneelingRegistor.get_master();
+    kneeling.scan = kneelingRegistor.get_scan();
+    kneeling.scan_landmarks = kneelingRegistor.get_landmarks();
     
     
     //ASSEMBLE:
@@ -84,22 +113,16 @@ void LegScan::create()
     
     
     
-    //set output:
-    left_leg.master = leftLegRegistor.get_master();
-    left_leg.scan = leftLegRegistor.get_scan();
-    left_leg.scan_landmarks = leftLegRegistor.get_landmarks();
-    
-    
     //Combine the 2 to print out:
     //Matrix3D temp(leftLegRegistor.get_scan().rows() + leftLegRegistor.get_master().rows(), 3);
     //temp << leftLegRegistor.get_scan(), leftLegRegistor.get_master();
     
     
     //make the landmaerk points the combined matrix:
-    Matrix3D temp(left_leg.scan_landmarks.size(), 3);
+    Matrix3D temp(kneeling.scan_landmarks.size(), 3);
 
     int row = 0;
-    for (const auto& [name, point] : left_leg.scan_landmarks) {
+    for (const auto& [name, point] : kneeling.scan_landmarks) {
         temp.row(row++) = point.transpose();
     }
     
@@ -112,17 +135,21 @@ void LegScan::create()
 
 
 
+
+
+
+
 void LegScan::readInMasters()
 {
     //clouds:
-    left_leg.master = readPLY("/Users/jamessenior/Desktop/Coding/KneeScanner/cpp/resources/masters/jamesV2.ply");
-    //right_leg.master = readPLY("jamesV2.ply");
-    //kneeling.master = readPLY("jamesV2.ply");
+    left_leg.master = readPLY("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/LeftLeg_james.ply");
+    right_leg.master = readPLY("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/RightLeg_james.ply");
+    kneeling.master = readPLY("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/Kneeling_james.ply");
     
     //landmarks:
-    left_leg.master_landmarks = readLandmarks("/Users/jamessenior/Desktop/Coding/KneeScanner/cpp/resources/masters/jamesV2.json");
-    //right_leg.master_landmarks = readLandmarks("jamesV2.json");
-    //kneeling.master_landmarks = readLandmarks("jamesV2.json");
+    left_leg.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/LeftLeg_james.json");
+    right_leg.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/RightLeg_james.json");
+    kneeling.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/Kneeling_james.json");
     
     //call back
     StatusEvent event;
@@ -130,7 +157,7 @@ void LegScan::readInMasters()
     event.subcomponent = Component::None;
     event.algorithm = Algorithm::None;
     event.level = LogLevel::Info;
-    event.message = "Read in 1 Master cloud and 1 Master landmark file";
+    event.message = "Read in 3 Master cloud and 3 Master landmark file";
     callback(event);
 }
 

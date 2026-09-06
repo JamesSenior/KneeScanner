@@ -162,19 +162,6 @@ void Aligner::initial_alignment()
     m_callback(event);
 
     
-    //put landmark points at the end so they are accessable
-    const int originalRows = m_master.rows();
-    int row = originalRows;
-     
-    m_master.conservativeResize(originalRows + m_landmarks.size(), 3);
-
-    for (const auto& [name, point] : m_landmarks) {
-        m_master.row(row++) = point.transpose();
-    }
-     
-    
-    
-    
     //center
     m_master = center(m_master); //centers both scan and master to 0,0,0 on their respective com
     m_scan = center(m_scan);

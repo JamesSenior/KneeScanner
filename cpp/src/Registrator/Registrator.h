@@ -23,7 +23,7 @@ public:
 
     //methods
     void segment();
-    void align();
+    void align(float alpha = 5.0f, float beta = 0.2f, float w = 0.05f, int max_iterations = 200, float tolarence = 2e-9f, int targetSize = 1500, bool twoStep = false);
 
 private:
     //properties

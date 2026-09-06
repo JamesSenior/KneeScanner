@@ -7,8 +7,9 @@ from pathlib import Path
 def main():
 
     #EDIT THESE
-    fileName = "jamesV2.ply"
-    labels = ["Big Toe", "Middle Toe", "Small Toe"]
+    fileName = "Kneeling_james.ply"
+    labels = ["achillesLeft", "ankleOutsideLeft", "creaseOutsideLeft", "creaseInsideLeft", "kneeLeft", "bigLeft", "smallLeft", "heelLeft", "ankleInsideLeft", "achillesRight", "ankleOutsideRight", "creaseOutsideRight", "creaseInsideRight", "kneeRight", "bigRight", "smallRight", "heelRight", "ankleInsideRight"]
+    #labels = ["spats", "achilles", "ankleOutside", "creaseOutside", "creaseInside", "calf", "knee", "big", "small", "heel", "ankleInside"]
 
 
     #Start
