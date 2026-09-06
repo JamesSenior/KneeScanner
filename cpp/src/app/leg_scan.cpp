@@ -82,7 +82,7 @@ void LegScan::create()
 
     std::thread t3([&]() {
         kneelingRegistor.segment();
-        kneelingRegistor.align(0.3f, 3.0f, 0.01f, 100, 2e-9f, 4000, true);
+        kneelingRegistor.align(0.3f, 3.0f, 0.01f, 50, 2e-9f, 4000, true);
     });
 
     // Wait for all three threads to finish
@@ -119,10 +119,10 @@ void LegScan::create()
     
     
     //make the landmaerk points the combined matrix:
-    Matrix3D temp(left_leg.scan_landmarks.size(), 3);
+    Matrix3D temp(kneeling.scan_landmarks.size(), 3);
 
     int row = 0;
-    for (const auto& [name, point] : left_leg.scan_landmarks) {
+    for (const auto& [name, point] : kneeling.scan_landmarks) {
         temp.row(row++) = point.transpose();
     }
     
@@ -148,8 +148,8 @@ void LegScan::readInMasters()
     
     //landmarks:
     left_leg.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/LeftLeg_james.json");
-    //right_leg.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/RightLeg_james.json");
-    //kneeling.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/Kneeling_james.json");
+    right_leg.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/RightLeg_james.json");
+    kneeling.master_landmarks = readLandmarks("/Users/jamessenior/github/KneeScanner/cpp/resources/masters/Kneeling_james.json");
     
     //call back
     StatusEvent event;
