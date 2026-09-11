@@ -5,6 +5,8 @@
 #include <map>
 #include "common/StatusEvent.h"
 #include <functional>
+#include "Assembler/Assembler.h"
+#include <memory>
 
 using Matrix3D = Eigen::Matrix<float, Eigen::Dynamic, 3>;
 
@@ -37,6 +39,8 @@ public:
     
     //methods:
     void create();
+    void customize();
+    void tessellate();
     
     void readInMasters();
     
@@ -71,4 +75,6 @@ private:
     std::map<std::string, Eigen::Vector3f> combined_landmarks;
     
     std::function<void(StatusEvent)> m_callback;
+    
+    std::unique_ptr<Assembler> assembler;
 };

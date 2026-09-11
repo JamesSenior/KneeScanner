@@ -1,6 +1,6 @@
 [
     {
-        "label": "spats",
+        "label": "spatsRight",
         "index": 5587,
         "point": [
             1.5864359140396118,
@@ -9,7 +9,7 @@
         ]
     },
     {
-        "label": "achilles",
+        "label": "achillesRight",
         "index": 3495,
         "point": [
             1.4445276260375977,
@@ -18,7 +18,7 @@
         ]
     },
     {
-        "label": "ankleOutside",
+        "label": "ankleOutsideRight",
         "index": 1403,
         "point": [
             1.475975513458252,
@@ -27,7 +27,7 @@
         ]
     },
     {
-        "label": "creaseOutside",
+        "label": "creaseOutsideRight",
         "index": 10540,
         "point": [
             1.332854151725769,
@@ -36,7 +36,7 @@
         ]
     },
     {
-        "label": "creaseInside",
+        "label": "creaseInsideRight",
         "index": 11162,
         "point": [
             1.374301791191101,
@@ -45,7 +45,7 @@
         ]
     },
     {
-        "label": "calf",
+        "label": "calfRight",
         "index": 1184,
         "point": [
             1.3347573280334473,
@@ -54,7 +54,7 @@
         ]
     },
     {
-        "label": "knee",
+        "label": "kneeRight",
         "index": 3382,
         "point": [
             1.3673015832901,
@@ -63,7 +63,7 @@
         ]
     },
     {
-        "label": "big",
+        "label": "bigRight",
         "index": 4553,
         "point": [
             1.6980717182159424,
@@ -72,7 +72,7 @@
         ]
     },
     {
-        "label": "small",
+        "label": "smallRight",
         "index": 4459,
         "point": [
             1.631636381149292,
@@ -81,7 +81,7 @@
         ]
     },
     {
-        "label": "heel",
+        "label": "heelRight",
         "index": 3989,
         "point": [
             1.4392811059951782,
@@ -90,7 +90,7 @@
         ]
     },
     {
-        "label": "ankleInside",
+        "label": "ankleInsideRight",
         "index": 3695,
         "point": [
             1.5103318691253662,

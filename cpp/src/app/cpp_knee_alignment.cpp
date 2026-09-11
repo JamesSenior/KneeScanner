@@ -83,6 +83,14 @@ void cpp_knee_alignment::run()
     //run process:
     leg_scan.create();
     
+    //cutomize scans:
+    //leg_scan.customize();
+    
+    //tesilate to get output:
+    //leg_scan.tessellate();
+    
+    
+    
     
     //write output file:
     if(leg_scan.isCreated())
