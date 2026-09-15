@@ -265,8 +265,8 @@ void Assembler::combine()
     //Step 1: pane cut
     //we now have 2 parts per leg scan: shin and foot
     
-    std::vector<std::string> ankleCutLeft = {"spatsLeft", "achillesLeft", "ankleOutsideLeft"};
-    std::vector<std::string> ankleCutRight = {"spatsRight", "achillesRight", "ankleOutsideRight"};
+    std::vector<std::string> ankleCutLeft = {"ankleInsideLeft", "achillesLeft", "ankleOutsideLeft"};
+    std::vector<std::string> ankleCutRight = {"ankleInsideRight", "achillesRight", "ankleOutsideRight"};
     std::vector<std::string> kneeCutLeft = {"creaseOutsideLeft", "creaseInsideLeft", "calfLeft"};
     std::vector<std::string> kneeCutRight = {"creaseOutsideRight", "creaseInsideRight", "calfRight"};
     
@@ -281,11 +281,11 @@ void Assembler::combine()
     
     //left shin (needs ankle and knee cut)
     Matrix3D Lshin = planeCut(m_left_leg, m_left_landmarks[kneeCutLeft[0]], m_left_landmarks[kneeCutLeft[1]], m_left_landmarks[kneeCutLeft[2]], m_left_landmarks[shinPointsLeft[3]]);
-    Lshin = planeCut(Lshin, m_left_landmarks[ankleCutLeft[0]], m_left_landmarks[ankleCutLeft[1]], m_left_landmarks[ankleCutLeft[2]], m_left_landmarks[shinPointsLeft[2]]);
+    Lshin = planeCut(Lshin, m_left_landmarks[ankleCutLeft[0]], m_left_landmarks[ankleCutLeft[1]], m_left_landmarks[ankleCutLeft[2]], m_left_landmarks[shinPointsLeft[5]]);
     
     //right shin (needs ankle and knee cut)
     Matrix3D Rshin = planeCut(m_right_leg, m_right_landmarks[kneeCutRight[0]], m_right_landmarks[kneeCutRight[1]], m_right_landmarks[kneeCutRight[2]], m_right_landmarks[shinPointsRight[3]]);
-    Rshin = planeCut(Rshin, m_right_landmarks[ankleCutRight[0]], m_right_landmarks[ankleCutRight[1]], m_right_landmarks[ankleCutRight[2]], m_right_landmarks[shinPointsRight[2]]);
+    Rshin = planeCut(Rshin, m_right_landmarks[ankleCutRight[0]], m_right_landmarks[ankleCutRight[1]], m_right_landmarks[ankleCutRight[2]], m_right_landmarks[shinPointsRight[5]]);
     
     
     
@@ -299,7 +299,6 @@ void Assembler::combine()
     
     //Step 3: align (ICP each leg part to kneeling)
     
-    
     //Step3: prune & combine (remove parts of the kneeling scan which is now replaced by leg scans and combineto single scan)
     //step 3a: combine leg scans
     combined = combineScans({Lfoot, Rfoot, Lshin, Rshin});
@@ -312,6 +311,7 @@ void Assembler::combine()
     
     
     //delete:
+    
     writeToPLY(Lfoot, "LFoot.ply");
     writeToPLY(Lshin, "LShin.ply");
     
