@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include "io/PLYFile.h"
 
 //constructor
 Assembler::Assembler(Matrix3D leftLeg, Matrix3D rightLeg, Matrix3D kneeling, std::map<std::string, Eigen::Vector3f> leftLandmarks, std::map<std::string, Eigen::Vector3f> rightLandmarks, std::map<std::string, Eigen::Vector3f> kneelingLandmarks, std::function<void(StatusEvent)> callback)
@@ -309,6 +309,16 @@ void Assembler::combine()
     
     //step 3c: combine knee scan
     combined = combineScans({combined, m_kneeling});
+    
+    
+    //delete:
+    writeToPLY(Lfoot, "LFoot.ply");
+    writeToPLY(Lshin, "LShin.ply");
+    
+    writeToPLY(Rfoot, "RFoot.ply");
+    writeToPLY(Rshin, "RShin.ply");
+    
+    
 }
 
 
