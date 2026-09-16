@@ -1,5 +1,5 @@
 #include "Aligner.h"
-#include "Common/kd_tree.h"
+#include "common/kd_tree.h"
 
 //ICP ALIGNMENT//
 //icp (rigid transform)

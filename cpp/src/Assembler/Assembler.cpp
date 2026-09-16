@@ -4,6 +4,7 @@
 #include <vector>
 #include "io/PLYFile.h"
 #include "Registrator/Aligner/Aligner.h"
+#include "common/kd_tree.h"
 
 //constructor
 Assembler::Assembler(Matrix3D leftLeg, Matrix3D rightLeg, Matrix3D kneeling, std::map<std::string, Eigen::Vector3f> leftLandmarks, std::map<std::string, Eigen::Vector3f> rightLandmarks, std::map<std::string, Eigen::Vector3f> kneelingLandmarks, std::function<void(StatusEvent)> callback)
@@ -38,7 +39,7 @@ Matrix3D planeCut(Matrix3D cloud, Eigen::Vector3f p1, Eigen::Vector3f p2, Eigen:
     normal.normalize();
     
     // 4. Make sure the normal points in the direction we want to keep
-    if (normal.dot(preserve) < 0)
+    if (normal.dot(preserve - p1) < 0)
     {
         normal = -normal;
     }
@@ -251,7 +252,42 @@ Matrix3D combineScans(const std::vector<Matrix3D>& scans)
 
 //pruning helper functions:
 
+Matrix3D prune(Matrix3D sourceCloud, Matrix3D toolCloud, int radius = 5, int threshold = 4)
+{
+    //The aim is to iterate through every point in the sourceCloud and delete it if the number of threshold points of toolCloud or more are within the radius
+    
+    Matrix3D keptPoints(0, 3); //will store kept points
+    
+    //build kd tree of tool cloud
+    PointCloudAdaptor adaptor(toolCloud);
+    KDTree tree(3, adaptor);
+    tree.buildIndex();
 
+
+    //iterate through tree
+    for (size_t i = 0; i < sourceCloud.rows(); ++i)
+    {
+        // query is the current point in the cloud:
+        float query[3] = {sourceCloud(i, 0), sourceCloud(i, 1), sourceCloud(i, 2)};
+
+        //holds output
+        std::vector<nanoflann::ResultItem<uint32_t, float>> neighbours;
+
+        tree.radiusSearch(query, radius * radius, neighbours); //search tree for every point in radius
+
+            
+        //check num of neighbours
+        if(neighbours.size() < threshold) //not enough leg scan points - keep point
+        {
+            const Matrix3D::Index oldRows = keptPoints.rows();
+            keptPoints.conservativeResize(oldRows + 1, 3);
+            keptPoints.row(oldRows) = sourceCloud.row(i);
+        }
+    }
+    
+    //return result
+    return keptPoints;
+}
 
 
 
@@ -325,19 +361,19 @@ void Assembler::combine()
     
     
     
-    //Step 4: prune & combine (remove parts of the kneeling scan which is now replaced by leg scans and combineto single scan)
-    //step 3a: combine leg scans
+    //Step 4: prune & combine (remove parts of the kneeling scan which is now replaced by leg scans and combine to single scan)
+    //step 4a: combine leg scans
     combined = combineScans({Lfoot, Rfoot, Lshin, Rshin});
     
     
     //step 4b: prune knee scan
+    Matrix3D pruned = prune(m_kneeling, combined);
     
     //step 4c: combine knee scan
-    combined = combineScans({combined, m_kneeling});
+    combined = combineScans({combined, pruned});
     
     
-    //delete:
-    
+    //for testing (delete):
     writeToPLY(Lfoot, "LFoot.ply");
     writeToPLY(Lshin, "LShin.ply");
     
