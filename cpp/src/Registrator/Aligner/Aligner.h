@@ -16,6 +16,7 @@ using Matrix3D = Eigen::Matrix<float, Eigen::Dynamic, 3>;
 class Aligner {
 public:
     Aligner(Matrix3D scan, Matrix3D master, std::map<std::string, Eigen::Vector3f> landmarks, std::function<void(StatusEvent)> callback);
+    Aligner(Matrix3D scan, Matrix3D master, std::function<void(StatusEvent)> callback);
     ~Aligner();
 
     //setters and getters

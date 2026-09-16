@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "io/PLYFile.h"
+#include "Registrator/Aligner/Aligner.h"
 
 //constructor
 Assembler::Assembler(Matrix3D leftLeg, Matrix3D rightLeg, Matrix3D kneeling, std::map<std::string, Eigen::Vector3f> leftLandmarks, std::map<std::string, Eigen::Vector3f> rightLandmarks, std::map<std::string, Eigen::Vector3f> kneelingLandmarks, std::function<void(StatusEvent)> callback)
@@ -248,6 +249,13 @@ Matrix3D combineScans(const std::vector<Matrix3D>& scans)
 
 
 
+//pruning helper functions:
+
+
+
+
+
+
 
 
 //methods:
@@ -298,15 +306,33 @@ void Assembler::combine()
     
     
     //Step 3: align (ICP each leg part to kneeling)
+    Aligner aligner = Aligner(m_kneeling, Lfoot, m_callback);
+    aligner.icp_alignment();
+    Lfoot = aligner.get_master();
     
-    //Step3: prune & combine (remove parts of the kneeling scan which is now replaced by leg scans and combineto single scan)
+    aligner.set_master(Lshin);
+    aligner.icp_alignment();
+    Lshin = aligner.get_master();
+    
+    aligner.set_master(Rfoot);
+    aligner.icp_alignment();
+    Rfoot = aligner.get_master();
+    
+    aligner.set_master(Rshin);
+    aligner.icp_alignment();
+    Rshin = aligner.get_master();
+    
+    
+    
+    
+    //Step 4: prune & combine (remove parts of the kneeling scan which is now replaced by leg scans and combineto single scan)
     //step 3a: combine leg scans
     combined = combineScans({Lfoot, Rfoot, Lshin, Rshin});
     
     
-    //step 3b: prune knee scan
+    //step 4b: prune knee scan
     
-    //step 3c: combine knee scan
+    //step 4c: combine knee scan
     combined = combineScans({combined, m_kneeling});
     
     

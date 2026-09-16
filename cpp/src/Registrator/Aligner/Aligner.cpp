@@ -20,6 +20,16 @@ Aligner::Aligner(Matrix3D scan, Matrix3D master, std::map<std::string, Eigen::Ve
     m_landmarks = landmarks;
     m_callback = callback;
 }
+
+Aligner::Aligner(
+    Matrix3D scan,
+    Matrix3D master,
+    std::function<void(StatusEvent)> callback
+)
+    : Aligner(scan, master, {}, callback)
+{
+}
+
 Aligner::~Aligner(){}
 
 
