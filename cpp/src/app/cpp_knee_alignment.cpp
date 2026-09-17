@@ -19,38 +19,6 @@ cpp_knee_alignment::~cpp_knee_alignment(){}
 
 
 
-//helper functions:
-
-#include <random>
-
-Eigen::Matrix3f randomRotation()
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-
-    // random Euler angles
-    float rx = dist(gen) * 2.0f * M_PI;
-    float ry = dist(gen) * 2.0f * M_PI;
-    float rz = dist(gen) * 2.0f * M_PI;
-
-    Eigen::AngleAxisf roll(rx, Eigen::Vector3f::UnitX());
-    Eigen::AngleAxisf pitch(ry, Eigen::Vector3f::UnitY());
-    Eigen::AngleAxisf yaw(rz, Eigen::Vector3f::UnitZ());
-
-    return (yaw * pitch * roll).toRotationMatrix();
-}
-
-void applyTransform(Matrix3D& cloud,
-                    const Eigen::Matrix3f& R,
-                    const Eigen::Vector3f& t)
-{
-    cloud = cloud * R.transpose();   // rotation (row vectors)
-    cloud.rowwise() += t.transpose(); // translation
-}
-
-
-
 
 
 //run function:
@@ -83,13 +51,21 @@ void cpp_knee_alignment::run()
     //run process:
     leg_scan.create();
     
+    //cutomize scans:
+    //leg_scan.customize();
+    
+    
+    
+    
     
     //write output file:
     if(leg_scan.isCreated())
     {
         Matrix3D output = leg_scan.getCombined();
+        
         writeToPLY(output, "output.ply");
         
+        /*
         writeToPLY(leg_scan.getLeftLeg().master, "LeftLegMaster.ply");
         writeToPLY(leg_scan.getLeftLeg().scan, "LeftLegScan.ply");
         
@@ -98,6 +74,7 @@ void cpp_knee_alignment::run()
         
         writeToPLY(leg_scan.getKneeling().master, "KneelingMaster.ply");
         writeToPLY(leg_scan.getKneeling().scan, "KneelingScan.ply");
+         */
     }
     else
     {

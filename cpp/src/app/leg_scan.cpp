@@ -105,33 +105,37 @@ void LegScan::create()
     kneeling.scan_landmarks = kneelingRegistor.get_landmarks();
     
     
+    
+    
     //ASSEMBLE:
     
+    //initilise global assembler pointer, the same one used by customize()
+    assembler = std::make_unique<Assembler>(left_leg.scan, right_leg.scan, kneeling.scan, left_leg.scan_landmarks, right_leg.scan_landmarks, kneeling.scan_landmarks, m_callback);
+    
+    assembler->combine();
+    combined = assembler->getCombined();
     
     
-    
-    
-    
-    
-    //Combine the 2 to print out:
-    //Matrix3D temp(leftLegRegistor.get_scan().rows() + leftLegRegistor.get_master().rows(), 3);
-    //temp << leftLegRegistor.get_scan(), leftLegRegistor.get_master();
-    
-    
-    //make the landmaerk points the combined matrix:
-    Matrix3D temp(kneeling.scan_landmarks.size(), 3);
-
-    int row = 0;
-    for (const auto& [name, point] : kneeling.scan_landmarks) {
-        temp.row(row++) = point.transpose();
-    }
-    
-    combined = temp;
     
     
     //set created to true
     created = true;
 }
+
+
+
+
+void LegScan::customize(){
+    
+}
+
+
+
+//runs a surface reconstruction algerithum and outputs STL file?
+void LegScan::tessellate(){
+    
+}
+
 
 
 
