@@ -18,7 +18,6 @@ public:
     explicit Assembler(Matrix3D leftLeg, Matrix3D rightLeg, Matrix3D kneeling, std::map<std::string, Eigen::Vector3f> leftLandmarks, std::map<std::string, Eigen::Vector3f> rightLandmarks, std::map<std::string, Eigen::Vector3f> kneelingLandmarks, std::function<void(StatusEvent)> callback);
 
     void combine();
-    void tessellate();
     void customize();
     
     Matrix3D getCombined(){return combined;}

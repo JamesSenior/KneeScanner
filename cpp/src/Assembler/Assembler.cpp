@@ -252,7 +252,7 @@ Matrix3D combineScans(const std::vector<Matrix3D>& scans)
 
 //pruning helper functions:
 
-Matrix3D prune(Matrix3D sourceCloud, Matrix3D toolCloud, int radius = 5, int threshold = 4)
+Matrix3D prune(Matrix3D sourceCloud, Matrix3D toolCloud, float radius = 0.023f, int threshold = 5)
 {
     //The aim is to iterate through every point in the sourceCloud and delete it if the number of threshold points of toolCloud or more are within the radius
     
@@ -332,7 +332,6 @@ void Assembler::combine()
     Rshin = planeCut(Rshin, m_right_landmarks[ankleCutRight[0]], m_right_landmarks[ankleCutRight[1]], m_right_landmarks[ankleCutRight[2]], m_right_landmarks[shinPointsRight[5]]);
     
     
-    
     //Step2: orientate
     Lfoot = orientate(Lfoot, m_left_landmarks, m_kneeling_landmarks, footPointsLeft);
     Rfoot = orientate(Rfoot, m_right_landmarks, m_kneeling_landmarks, footPointsRight);
@@ -372,29 +371,10 @@ void Assembler::combine()
     //step 4c: combine knee scan
     combined = combineScans({combined, pruned});
     
-    
-    //for testing (delete):
-    writeToPLY(Lfoot, "LFoot.ply");
-    writeToPLY(Lshin, "LShin.ply");
-    
-    writeToPLY(Rfoot, "RFoot.ply");
-    writeToPLY(Rshin, "RShin.ply");
-    
-    
 }
 
 
 
-
-void Assembler::tessellate()
-{
-    if(combined.rows() == 0){
-        std::cout << "No 'combined' cloud to work on" << std::endl;
-        return;
-    }
-    
-    
-}
 
 
 
