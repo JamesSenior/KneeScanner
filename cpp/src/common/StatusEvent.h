@@ -20,6 +20,7 @@ enum class Component
     Aligner,
     Segmentor,
     Assembler,
+    Tessellator,
     IO
 };
 
@@ -30,7 +31,12 @@ enum class Algorithm
     EuclideanCluster,
     PCA,
     ICP,
-    CPD
+    CPD,
+    PointCloudConversion,
+    NormalEstimation,
+    PoissonReconstruction,
+    MeshTrimming,
+    MeshExport
 };
 
 struct StatusEvent

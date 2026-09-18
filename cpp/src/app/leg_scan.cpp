@@ -2,6 +2,7 @@
 #include "app/leg_scan.h"
 #include "io/PLYFile.h"
 #include "Registrator/Registrator.h"
+#include "Tessellator/Tessellator.h"
 
 #include <iostream>
 #include <fstream>
@@ -114,6 +115,14 @@ void LegScan::create()
     
     assembler->combine();
     combined = assembler->getCombined();
+    
+    
+    
+    //TESSELLATE:
+    Tessellator tessellator = Tessellator(m_callback);
+    tessellator.setPointCloud(combined);
+    tessellator.tessellate(1.0, 1.0);
+    
     
     
     

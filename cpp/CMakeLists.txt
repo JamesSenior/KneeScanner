@@ -19,6 +19,10 @@ FetchContent_MakeAvailable(json)
 
 find_package(Eigen3 REQUIRED)
 
+# Open3D is downloaded locally into cpp/third_party/Open3D.
+set(Open3D_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Open3D")
+find_package(Open3D REQUIRED)
+
 #FetchContent_MakeAvailable(cpd)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -43,4 +47,8 @@ target_include_directories(cpp_knee_alignment PRIVATE
     #${cpd_SOURCE_DIR}/include
 )
 
-target_link_libraries(cpp_knee_alignment PRIVATE Eigen3::Eigen PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(cpp_knee_alignment PRIVATE
+    Eigen3::Eigen
+    nlohmann_json::nlohmann_json
+    Open3D::Open3D
+)

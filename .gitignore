@@ -79,4 +79,7 @@ Testing/
 output/
 python/landmark_annotator/resources/
 
+# Downloaded third-party C++ library (large local dependency).
+cpp/third_party/Open3D/
+
 .DS_Store

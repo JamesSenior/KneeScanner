@@ -103,6 +103,9 @@ std::ostream& operator<<(std::ostream& os, Component component)
         case Component::Assembler:
             return os << "Assembler";
 
+        case Component::Tessellator:
+            return os << "Tessellator";
+
         case Component::IO:
             return os << "IO";
     }
@@ -135,6 +138,21 @@ std::ostream& operator<<(std::ostream& os, Algorithm algorithm)
 
         case Algorithm::CPD:
             return os << "CPD";
+
+        case Algorithm::PointCloudConversion:
+            return os << "Point Cloud Conversion";
+
+        case Algorithm::NormalEstimation:
+            return os << "Normal Estimation";
+
+        case Algorithm::PoissonReconstruction:
+            return os << "Poisson Reconstruction";
+
+        case Algorithm::MeshTrimming:
+            return os << "Mesh Trimming";
+
+        case Algorithm::MeshExport:
+            return os << "Mesh Export";
     }
 
     return os << "Unknown Algorithm";
